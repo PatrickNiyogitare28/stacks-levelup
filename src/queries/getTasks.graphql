@@ -1,0 +1,12 @@
+query fetchTasks {
+    tasks {
+          id
+          name
+          start_time
+          end_time
+          completed
+          created_at
+          updated_at
+        
+    }
+}

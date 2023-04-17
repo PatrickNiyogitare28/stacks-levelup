@@ -1,0 +1,17 @@
+mutation AddTask($newTask: NewTaskInput!) {
+  createTask(newTask: $newTask) {
+    id
+    name
+    start_date
+    end_date
+    completed
+    created_at
+    updated_at
+  }
+}
+
+input NewTaskInput {
+  name: String!
+  start_date: String!
+  end_date: String!
+}

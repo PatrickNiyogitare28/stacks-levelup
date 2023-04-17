@@ -509,12 +509,35 @@ export type Timestamptz_Comparison_Exp = {
   _nin?: InputMaybe<Array<Scalars['timestamptz']>>;
 };
 
+export type AddTaskMutationVariables = Exact<{
+  name: Scalars['String'];
+  start_time: Scalars['String'];
+  end_time: Scalars['String'];
+}>;
+
+
+export type AddTaskMutation = { __typename?: 'mutation_root', insert_tasks_one?: { __typename?: 'tasks', id: number, name: string, start_time: string, end_time: string, created_at: any, updated_at: any } | null };
+
 export type FetchTasksQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FetchTasksQuery = { __typename?: 'query_root', tasks: Array<{ __typename?: 'tasks', id: number, name: string, start_time: string, end_time: string, completed?: boolean | null, created_at: any, updated_at: any }> };
 
 
+export const AddTask = gql`
+    mutation AddTask($name: String!, $start_time: String!, $end_time: String!) {
+  insert_tasks_one(
+    object: {name: $name, start_time: $start_time, end_time: $end_time}
+  ) {
+    id
+    name
+    start_time
+    end_time
+    created_at
+    updated_at
+  }
+}
+    `;
 export const FetchTasks = gql`
     query fetchTasks {
   tasks {
@@ -1619,6 +1642,24 @@ export default {
   }
 } as unknown as IntrospectionQuery;
 
+export const AddTaskDocument = gql`
+    mutation AddTask($name: String!, $start_time: String!, $end_time: String!) {
+  insert_tasks_one(
+    object: {name: $name, start_time: $start_time, end_time: $end_time}
+  ) {
+    id
+    name
+    start_time
+    end_time
+    created_at
+    updated_at
+  }
+}
+    `;
+
+export function useAddTaskMutation() {
+  return Urql.useMutation<AddTaskMutation, AddTaskMutationVariables>(AddTaskDocument);
+};
 export const FetchTasksDocument = gql`
     query fetchTasks {
   tasks {

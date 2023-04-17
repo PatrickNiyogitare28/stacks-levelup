@@ -1,17 +1,14 @@
-mutation AddTask($newTask: NewTaskInput!) {
-  createTask(newTask: $newTask) {
+mutation AddTask($name: String!, $start_time: String!, $end_time: String!) {
+  insert_tasks_one(object: {
+    name: $name,
+    start_time: $start_time,
+    end_time: $end_time
+  }) {
     id
     name
-    start_date
-    end_date
-    completed
+    start_time
+    end_time
     created_at
     updated_at
   }
-}
-
-input NewTaskInput {
-  name: String!
-  start_date: String!
-  end_date: String!
 }

@@ -1,25 +1,27 @@
-import { useFetchTasksQuery } from '@/generated/graphql';
+import { useAddTaskMutation, useFetchTasksQuery } from '@/generated/graphql';
 import { useState } from 'react';
 import { HiPlusCircle } from 'react-icons/hi';
 
 const TodoList = () => {
-
-  const [{data}] = useFetchTasksQuery();
-  console.log("data here");
-  console.log(data);
+  const [{ data }] = useFetchTasksQuery();
+  const [{ data: newTaskData }, addData] = useAddTaskMutation();
   const [newTask, setNewTask] = useState<string>('');
+  const [startTime, setStartTime] = useState<string>('');
+  const [endTime, setEndTime] = useState<string>('');
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (newTask.trim() === '') {
       return;
     }
 
-    // setTasks([...tasks, newTask]);
+    await addData({ name: newTask, start_time: startTime, end_time: endTime });
     setNewTask('');
+    setStartTime('');
+    setEndTime('');
   };
 
   return (
-    <div className="max-w-md mx-auto">
+    <div className="max-w-md mx-auto p-4 bg-green-50 rounded-lg">
       <h1 className="text-2xl font-bold mb-4">Todo List</h1>
 
       <div className="flex mb-4">
@@ -29,6 +31,22 @@ const TodoList = () => {
           className="flex-grow border border-gray-300 p-2 rounded-l-md"
           value={newTask}
           onChange={(e) => setNewTask(e.target.value)}
+        />
+
+        <input
+          type="text"
+          placeholder="Start time"
+          className="w-32 border border-gray-300 p-2 rounded-l-none rounded-r-md"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+        />
+
+        <input
+          type="text"
+          placeholder="End time"
+          className="w-32 border border-gray-300 p-2 rounded-l-none rounded-r-md"
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
         />
 
         <button
@@ -45,7 +63,7 @@ const TodoList = () => {
         <ul className="list-disc pl-6">
           {data?.tasks.map((task, index: number) => (
             <li key={task.id} className="mb-2">
-              {task.name}
+              <span className="font-bold">{task.name}</span> | {task.start_time} - {task.end_time}
             </li>
           ))}
         </ul>

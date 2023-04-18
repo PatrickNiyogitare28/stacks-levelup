@@ -1,12 +1,12 @@
-import { useAddTaskMutation, useFetchTasksQuery } from '@/generated/graphql';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { useQuery } from '@tanstack/react-query'
 import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { Tasks as Task } from '@/generated/graphql';
+import { yupResolver } from '@hookform/resolvers/yup';
 import FormInput from './FormInput';
+import axios from 'axios';
 
 const TodoList = () => {
-    const [{ data }] = useFetchTasksQuery();
-    const [{ data: newTaskData }, addData] = useAddTaskMutation();
     const schema = Yup.object().shape({
         name: Yup.string().required('This field is required.'),
         start_time: Yup.string().required('This field is required.'),
@@ -17,11 +17,22 @@ const TodoList = () => {
     });
 
     const onSubmit = async (formData: any) => {
-        await addData({ name: formData.name, start_time: formData.start_time, end_time: formData.end_time });
-        reset();
+        try {
+            await axios.post("/api/tasks", formData); // Make a POST request to the /api/tasks endpoint with the form data
+            reset();
+        } catch (error) {
+            console.error('Failed to add task:', error);
+            // Handle the error as needed
+        }
     };
 
-    console.log(errors.root);
+    const { isLoading, error, data, isFetching } = useQuery({
+        queryKey: ["tasks"],
+        queryFn: () =>
+            axios
+                .get("/api/tasks")
+                .then((res) => res?.data?.data),
+    });
 
     return (
         <div className="max-w-md mx-auto p-4 bg-green-50 rounded-lg">
@@ -34,7 +45,7 @@ const TodoList = () => {
                             placeholder="Task"
                             defaultValue=""
                             name="name"
-                            register={((name:string) => register(name))}
+                            register={((name: string) => register(name))}
                             type="text"
                             className="w-full px-4 py-2 bg-gray-200 rounded-md focus:bg-white focus:outline-none"
                         />
@@ -46,7 +57,7 @@ const TodoList = () => {
                             placeholder="Start time"
                             defaultValue=""
                             name="start_time"
-                            register={((name:string) => register(name))}
+                            register={((name: string) => register(name))}
                             type="text"
                             className="w-full px-4 py-2 bg-gray-200 rounded-md focus:bg-white focus:outline-none"
                         />
@@ -56,7 +67,7 @@ const TodoList = () => {
                             placeholder="End time"
                             defaultValue=""
                             name="end_time"
-                            register={((name:string) => register(name))}
+                            register={((name: string) => register(name))}
                             type="text"
                             className="w-full px-4 py-2 bg-gray-200 rounded-md focus:bg-white focus:outline-none"
                         />
@@ -71,13 +82,13 @@ const TodoList = () => {
                     </button>
                 </div>
             </form>
-            
 
-            {data?.tasks.length === 0 ? (
+
+            {data?.tasks?.length === 0 ? (
                 <p className="text-gray-400">No tasks</p>
             ) : (
                 <ul className="list-disc pl-6">
-                    {data?.tasks.map((task, index: number) => (
+                    {data?.tasks?.map((task: Task, index: number) => (
                         <li key={task.id} className="mb-2">
                             <span className="font-bold">{task.name}</span> | {task.start_time} - {task.end_time}
                         </li>

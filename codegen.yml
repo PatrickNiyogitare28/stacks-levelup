@@ -8,14 +8,11 @@ documents:
   # - "src/pages/api/_queries/**/*.graphql"
 generates:
   src/generated/graphql.ts:
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-query
     config:
-      withHooks: true
-    plugins:
-      - "typescript"
-      - "typescript-operations"
-      - "typescript-document-nodes"
-      - "urql-introspection"
-      - "typescript-urql"
-  ./graphql.schema.json:
-    plugins:
-      - "introspection"
+      fetcher: graphql-request
+      exposeQueryKeys: true
+      pureMagicComment: true

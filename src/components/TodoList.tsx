@@ -102,7 +102,7 @@ const TodoList = () => {
     };
 
     return (
-        <div className="flex justify-center items-center ">
+        <div className="flex justify-center items-center mt-4">
             <div className="w-3/4 min-h-[70vh] bg-green-50 rounded-lg">
                 <Toaster />
                 <h1 className="text-2xl font-bold mb-4 text-center">Todo List</h1>

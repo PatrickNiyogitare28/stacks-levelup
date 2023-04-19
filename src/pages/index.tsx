@@ -1,10 +1,13 @@
 import React from 'react';
-import Todo from './todo';
 import { GetServerSideProps } from 'next';
+import TodoList from '@/components/TodoList';
+import Layout from '@/components/Layout';
 
 export default function Home() {
   return (
-   <Todo />
+    <Layout>
+     <TodoList />
+    </Layout>
   )
 }
 

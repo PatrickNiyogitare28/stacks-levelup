@@ -30,7 +30,7 @@ const LoginForm = () => {
             storage.setAccessToken(response.accessToken as string);
             storage.setRefreshToken(response.refreshToken as string);
             toast.success(response?.message || "Logged in")
-            router.replace('/todo')
+            router.replace('/')
             reset();
         },
         onError: (e: CustomError) => {

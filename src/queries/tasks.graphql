@@ -1,4 +1,4 @@
-mutation AddTask($name: String!, $start_time: String!, $end_time: String!, $user_id: Int!) {
+mutation addTask($name: String!, $start_time: String!, $end_time: String!, $user_id: Int!) {
   insert_tasks_one(object: {
     name: $name,
     start_time: $start_time,
@@ -14,14 +14,41 @@ mutation AddTask($name: String!, $start_time: String!, $end_time: String!, $user
   }
 }
 
-query fetchTasks($user_id: Int!) {
-  tasks(where: {user_id: {_eq: $user_id}}) {
+  query fetchTasks($user_id: Int!) {
+    tasks(where: {user_id: {_eq: $user_id}}) {
+      id
+      name
+      start_time
+      end_time
+      completed
+      created_at
+      updated_at
+    }
+  }
+
+query getTaskById($id: Int!) {
+  tasks_by_pk(id: $id) {
     id
     name
-    start_time
-    end_time
     completed
-    created_at
-    updated_at
+    user_id
   }
 }
+
+mutation updateTask($id: Int!, $completed: Boolean!) {
+  update_tasks_by_pk(pk_columns: {id: $id}, _set: {completed: $completed}) {
+    id
+    name
+    completed
+  }
+}
+
+mutation deleteTask($id: Int!) {
+  delete_tasks_by_pk(id: $id) {
+    id
+    name
+    completed
+  }
+}
+
+

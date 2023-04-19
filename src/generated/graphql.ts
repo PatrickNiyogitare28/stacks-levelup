@@ -947,6 +947,28 @@ export type FetchTasksQueryVariables = Exact<{
 
 export type FetchTasksQuery = { __typename?: 'query_root', tasks: Array<{ __typename?: 'tasks', id: number, name: string, start_time: string, end_time: string, completed?: boolean | null, created_at: any, updated_at: any }> };
 
+export type GetTaskByIdQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetTaskByIdQuery = { __typename?: 'query_root', tasks_by_pk?: { __typename?: 'tasks', id: number, name: string, completed?: boolean | null, user_id: number } | null };
+
+export type UpdateTaskMutationVariables = Exact<{
+  id: Scalars['Int'];
+  completed: Scalars['Boolean'];
+}>;
+
+
+export type UpdateTaskMutation = { __typename?: 'mutation_root', update_tasks_by_pk?: { __typename?: 'tasks', id: number, name: string, completed?: boolean | null } | null };
+
+export type DeleteTaskMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type DeleteTaskMutation = { __typename?: 'mutation_root', delete_tasks_by_pk?: { __typename?: 'tasks', id: number, name: string, completed?: boolean | null } | null };
+
 
 export const SignupDocument = /*#__PURE__*/ `
     mutation Signup($full_name: String!, $email: String!, $password: String!) {
@@ -1000,7 +1022,7 @@ useLoginQuery.getKey = (variables: LoginQueryVariables) => ['Login', variables];
 ;
 
 export const AddTaskDocument = /*#__PURE__*/ `
-    mutation AddTask($name: String!, $start_time: String!, $end_time: String!, $user_id: Int!) {
+    mutation addTask($name: String!, $start_time: String!, $end_time: String!, $user_id: Int!) {
   insert_tasks_one(
     object: {name: $name, start_time: $start_time, end_time: $end_time, user_id: $user_id}
   ) {
@@ -1022,7 +1044,7 @@ export const useAddTaskMutation = <
       headers?: RequestInit['headers']
     ) =>
     useMutation<AddTaskMutation, TError, AddTaskMutationVariables, TContext>(
-      ['AddTask'],
+      ['addTask'],
       (variables?: AddTaskMutationVariables) => fetcher<AddTaskMutation, AddTaskMutationVariables>(client, AddTaskDocument, variables, headers)(),
       options
     );
@@ -1056,3 +1078,76 @@ export const useFetchTasksQuery = <
 
 useFetchTasksQuery.getKey = (variables: FetchTasksQueryVariables) => ['fetchTasks', variables];
 ;
+
+export const GetTaskByIdDocument = /*#__PURE__*/ `
+    query getTaskById($id: Int!) {
+  tasks_by_pk(id: $id) {
+    id
+    name
+    completed
+    user_id
+  }
+}
+    `;
+export const useGetTaskByIdQuery = <
+      TData = GetTaskByIdQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: GetTaskByIdQueryVariables,
+      options?: UseQueryOptions<GetTaskByIdQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<GetTaskByIdQuery, TError, TData>(
+      ['getTaskById', variables],
+      fetcher<GetTaskByIdQuery, GetTaskByIdQueryVariables>(client, GetTaskByIdDocument, variables, headers),
+      options
+    );
+
+useGetTaskByIdQuery.getKey = (variables: GetTaskByIdQueryVariables) => ['getTaskById', variables];
+;
+
+export const UpdateTaskDocument = /*#__PURE__*/ `
+    mutation updateTask($id: Int!, $completed: Boolean!) {
+  update_tasks_by_pk(pk_columns: {id: $id}, _set: {completed: $completed}) {
+    id
+    name
+    completed
+  }
+}
+    `;
+export const useUpdateTaskMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<UpdateTaskMutation, TError, UpdateTaskMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<UpdateTaskMutation, TError, UpdateTaskMutationVariables, TContext>(
+      ['updateTask'],
+      (variables?: UpdateTaskMutationVariables) => fetcher<UpdateTaskMutation, UpdateTaskMutationVariables>(client, UpdateTaskDocument, variables, headers)(),
+      options
+    );
+export const DeleteTaskDocument = /*#__PURE__*/ `
+    mutation deleteTask($id: Int!) {
+  delete_tasks_by_pk(id: $id) {
+    id
+    name
+    completed
+  }
+}
+    `;
+export const useDeleteTaskMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<DeleteTaskMutation, TError, DeleteTaskMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<DeleteTaskMutation, TError, DeleteTaskMutationVariables, TContext>(
+      ['deleteTask'],
+      (variables?: DeleteTaskMutationVariables) => fetcher<DeleteTaskMutation, DeleteTaskMutationVariables>(client, DeleteTaskDocument, variables, headers)(),
+      options
+    );

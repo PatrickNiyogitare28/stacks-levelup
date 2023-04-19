@@ -10,6 +10,7 @@ import { CustomError } from '@/types/frontend/axios';
 import { useEffect } from 'react';
 import { AxiosError, HttpStatusCode } from 'axios';
 import { useRouter } from 'next/router';
+import { FaTrash } from 'react-icons/fa';
 
 const TodoList = () => {
     const router = useRouter();
@@ -39,11 +40,27 @@ const TodoList = () => {
     }, [fetchTasksError])
 
 
+    /* Creating a new task */
     const handleSaveTask = async (formData: FormData) => {
         const { data: response } = await axiosInstance.post("/tasks", formData);
         return response.data;
     }
 
+    /* Updating the task */
+    const handleUpdateTask = async (id: number) => {
+        toast("Updating task ...")
+        const { data: response } = await axiosInstance.put(`/tasks/${id}`);
+        return response.data;
+    }
+
+    /* Delete the task */
+    const handleDeleteTask = async (id: number) => {
+        toast("Deleting task ...");
+        const { data: response } = await axiosInstance.delete(`/tasks/${id}`);
+        return response.data;
+    }
+
+    /* Create new task react-query mutation */
     const { mutate: createTaskMutation, isLoading: isAddingTask } = useMutation(handleSaveTask, {
         onSuccess: (response: CustomError) => {
             toast.success(response?.message || "New task added")
@@ -55,6 +72,27 @@ const TodoList = () => {
         },
     });
 
+    /* Update task react-query mutation */
+    const { mutate: updateTaskMutation, isLoading: isUpdatingTask } = useMutation(handleUpdateTask, {
+        onSuccess: (response: CustomError) => {
+            refetch();
+        },
+        onError: (e: CustomError) => {
+            toast.error(e?.response?.data?.message || "Failed to mark task as completed")
+        },
+    })
+
+    /* Delete task react-query mutation */
+    const { mutate: deleteTaskMutation, isLoading: isDeletingTask } = useMutation(handleDeleteTask, {
+        onSuccess: (response: CustomError) => {
+            toast.success(response?.message || "Task deleted successfully")
+            refetch();
+        },
+        onError: (e: CustomError) => {
+            toast.error(e?.response?.data?.message || "Failed to remove task")
+        },
+    })
+
     const onSubmit = async (formData: any) => {
         try {
             createTaskMutation(formData);
@@ -65,7 +103,7 @@ const TodoList = () => {
 
     return (
         <div className="flex justify-center items-center h-screen">
-            <div className="w-3/4 bg-green-50 rounded-lg">
+            <div className="w-3/4 min-h-[70vh] bg-green-50 rounded-lg">
                 <Toaster />
                 <h1 className="text-2xl font-bold mb-4 text-center">Todo List</h1>
 
@@ -119,18 +157,29 @@ const TodoList = () => {
                         {data?.tasks?.length === 0 ? (
                             <p className="text-gray-400">No tasks</p>
                         ) : (
-                            <ul className="list-disc pl-6">
-                                {data?.tasks?.map((task: Task, index: number) => (
-                                    <li key={task.id} className="mb-2 flex items-center">
+                            <div className="pl-6">
+                                {data?.tasks?.map((task: Task) => (
+                                    <div key={task.id} className="p-4 flex justify-between border-[1px] border-gray-500 mt-4 rounded-md bg-white ">
                                         <input
                                             type="checkbox"
                                             className="mr-2"
                                             checked={task.completed as boolean}
+                                            onChange={() =>
+                                                updateTaskMutation(task.id)
+                                            }
                                         />
-                                        <span className="font-bold">{task.name}</span> | {task.start_time} - {task.end_time}
-                                    </li>
+                                        <span className="font-bold">{task.name}</span> {task.start_time} - {task.end_time}
+                                        <button
+                                            className="ml-2 text-gray-500 hover:text-red-500"
+                                            onClick={() =>
+                                                deleteTaskMutation(task.id)
+                                            }
+                                        >
+                                            <FaTrash />
+                                        </button>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         )}
                     </div>
 

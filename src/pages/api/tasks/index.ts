@@ -15,9 +15,9 @@ async function handler(
   res: NextApiResponse<Data>
 ) {
   if (req.method === 'GET') {
-    await getHandler(req, res); // Call the getHandler for GET requests
+    await getHandler(req, res); 
   } else if (req.method === 'POST') {
-    await postHandler(req, res); // Call the postHandler for POST requests
+    await postHandler(req, res); 
   } else {
     res.status(405).json({ error: 'Method Not Allowed' });
   }
@@ -28,7 +28,7 @@ async function getHandler(
   res: NextApiResponse<Data>
 ) {
   try {
-    const user_id = req.body.user_id;
+    const { user_id } = req.query;
     const response = await graphqlRequestClient.request(FetchTasksDocument, {user_id});
     res.status(HttpStatusCode.Ok).json({ data: response });
   } catch (error) {
@@ -41,7 +41,8 @@ async function postHandler(
   res: NextApiResponse<Data>
 ) {
   try {
-    const { name, start_time, end_time, user_id } = req.body;
+    const { name, start_time, end_time } = req.body;
+    const { user_id } = req.query;
     const response = await graphqlRequestClient.request(AddTaskDocument, {
       name, start_time, end_time, user_id
     });

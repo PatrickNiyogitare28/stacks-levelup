@@ -16,10 +16,10 @@ const authMiddleware = (handler: (req: NextApiRequest, res: NextApiResponse) => 
     const decoded = await decodeToken(token);
     if(!decoded) return res.status(HttpStatusCode.Unauthorized).json({error: 'Unauthorized'})
 
-    req.body = {...req.body, user_id: decoded.id};
+    req.query.user_id = decoded.id;
     return handler(req, res);
   } catch (error) {
-    return res.status(401).json({ error: 'Unauthorized' });
+    return res.status(HttpStatusCode.Unauthorized).json({ error: 'Unauthorized' });
   }
 };
 

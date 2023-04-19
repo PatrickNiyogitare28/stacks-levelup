@@ -1,8 +1,10 @@
 import React from 'react';
-import TodoList from '@/components/TodoList';
+import Signup from './auth/signup';
+import Login from './auth/login';
 
 export default function Home() {
   return (
-    <TodoList />
+    // <Signup />
+    <Login />
   )
 }

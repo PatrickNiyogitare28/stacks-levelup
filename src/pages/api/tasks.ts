@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { FetchTasksDocument, AddTaskDocument } from '@/generated/graphql';
 import graphqlRequestClient from '@/lib/client';
+import { HttpStatusCode } from 'axios';
 
 type Data = {
   error?: string;
@@ -27,11 +28,9 @@ async function getHandler(
 ) {
   try {
     const response = await graphqlRequestClient.request(FetchTasksDocument);
-    console.log(response);
-    res.status(200).json({ data: response });
+    res.status(HttpStatusCode.Ok).json({ data: response });
   } catch (error) {
-    console.error('Failed to fetch tasks:', error);
-    res.status(500).json({ error: 'Failed to fetch tasks' });
+    res.status(HttpStatusCode.InternalServerError).json({ error: 'Failed to fetch tasks' });
   }
 }
 
@@ -47,8 +46,8 @@ async function postHandler(
     const response = await graphqlRequestClient.request(AddTaskDocument, {
       name, start_time, end_time
     });
-    res.status(200).json({ data: response });
+    res.status(HttpStatusCode.Created).json({ data: response });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create task' });
+    res.status(HttpStatusCode.InternalServerError).json({ error: 'Failed to create task' });
   }
 }

@@ -5,9 +5,6 @@ import {
   QueryClientProvider,
 } from '@tanstack/react-query'
 
-import { ReactQueryDevtools } from 'react-query/devtools'
-import { Toaster } from 'react-hot-toast'
-
 const queryClient = new QueryClient()
 
 function MyApp({ Component, pageProps }: AppProps) {

@@ -1,8 +1,6 @@
 import { GraphQLClient } from 'graphql-request'
-import { storage } from './utils/storage'
 
 const requestHeaders = {
-    Authorization: `Bearer ${storage.getAccessToken()}`,
     'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET as string,
     'content-type': 'application/json'
 }

@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import { Tasks as Task } from '@/generated/graphql';
 import { yupResolver } from '@hookform/resolvers/yup';
 import FormInput from './FormInput';
-import axios from 'axios';
+import axiosInstance from '@/lib/axios';
 
 const TodoList = () => {
     const schema = Yup.object().shape({
@@ -18,7 +18,7 @@ const TodoList = () => {
 
     const onSubmit = async (formData: any) => {
         try {
-            await axios.post("/api/tasks", formData); // Make a POST request to the /api/tasks endpoint with the form data
+            await axiosInstance.post("/tasks", formData); // Make a POST request to the /api/tasks endpoint with the form data
             reset();
         } catch (error) {
             console.error('Failed to add task:', error);
@@ -29,8 +29,8 @@ const TodoList = () => {
     const { isLoading, error, data, isFetching } = useQuery({
         queryKey: ["tasks"],
         queryFn: () =>
-            axios
-                .get("/api/tasks")
+            axiosInstance
+                .get("/tasks")
                 .then((res) => res?.data?.data),
     });
 

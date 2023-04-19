@@ -1,0 +1,10 @@
+mutation Signup($full_name: String!, $email: String!, $password: String!) {
+  insert_users_one(object: {
+    full_name: $full_name,
+    email: $email,
+    password: $password
+  }) {
+    id
+    full_name
+  }
+}

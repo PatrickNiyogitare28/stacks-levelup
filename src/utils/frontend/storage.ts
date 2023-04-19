@@ -1,3 +1,4 @@
+import axiosInstance from '@/lib/axios'
 import { isBrowser } from '.'
 
 export const storage = {
@@ -8,6 +9,7 @@ export const storage = {
     },
     setAccessToken: (token: string) => {
         localStorage.setItem('todo_token', token)
+        axiosInstance.defaults.headers.common.Authorization = `Bearer ${token}`;
     },
     getRefreshToken: () => {
         if (!isBrowser) return

@@ -1,10 +1,8 @@
 import React from 'react';
-import Signup from './auth/signup';
-import Login from './auth/login';
+import Todo from './todo';
 
 export default function Home() {
   return (
-    // <Signup />
-    <Login />
+    <Todo />
   )
 }

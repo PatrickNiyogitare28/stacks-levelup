@@ -1,8 +1,9 @@
-mutation AddTask($name: String!, $start_time: String!, $end_time: String!) {
+mutation AddTask($name: String!, $start_time: String!, $end_time: String!, $user_id: Int!) {
   insert_tasks_one(object: {
     name: $name,
     start_time: $start_time,
-    end_time: $end_time
+    end_time: $end_time,
+    user_id: $user_id
   }) {
     id
     name

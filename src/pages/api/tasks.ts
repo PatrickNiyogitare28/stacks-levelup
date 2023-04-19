@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { FetchTasksDocument, AddTaskDocument } from '@/generated/graphql';
 import graphqlRequestClient from '@/lib/client';
 import { HttpStatusCode } from 'axios';
+import authMiddleware from './middlewares/authMiddleware';
 
 type Data = {
   error?: string;
@@ -9,7 +10,7 @@ type Data = {
   data?: unknown;
 };
 
-export default async function handler(
+async function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
@@ -27,7 +28,8 @@ async function getHandler(
   res: NextApiResponse<Data>
 ) {
   try {
-    const response = await graphqlRequestClient.request(FetchTasksDocument);
+    const user_id = req.body.user_id;
+    const response = await graphqlRequestClient.request(FetchTasksDocument, {user_id});
     res.status(HttpStatusCode.Ok).json({ data: response });
   } catch (error) {
     res.status(HttpStatusCode.InternalServerError).json({ error: 'Failed to fetch tasks' });
@@ -39,15 +41,14 @@ async function postHandler(
   res: NextApiResponse<Data>
 ) {
   try {
-    // Extract the data from the request body
-    const { name, start_time, end_time } = req.body;
-    
-    // Call the GraphQL mutation to create a task
+    const { name, start_time, end_time, user_id } = req.body;
     const response = await graphqlRequestClient.request(AddTaskDocument, {
-      name, start_time, end_time
+      name, start_time, end_time, user_id
     });
     res.status(HttpStatusCode.Created).json({ data: response });
   } catch (error) {
     res.status(HttpStatusCode.InternalServerError).json({ error: 'Failed to create task' });
   }
 }
+
+export default authMiddleware(handler);

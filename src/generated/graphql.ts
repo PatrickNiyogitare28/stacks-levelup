@@ -388,6 +388,7 @@ export type Tasks = {
   name: Scalars['String'];
   start_time: Scalars['String'];
   updated_at: Scalars['timestamptz'];
+  user_id: Scalars['Int'];
 };
 
 /** aggregated selection of "tasks" */
@@ -424,6 +425,7 @@ export type Tasks_Aggregate_FieldsCountArgs = {
 export type Tasks_Avg_Fields = {
   __typename?: 'tasks_avg_fields';
   id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to filter rows from the table "tasks". All fields are combined with a logical 'AND'. */
@@ -438,6 +440,7 @@ export type Tasks_Bool_Exp = {
   name?: InputMaybe<String_Comparison_Exp>;
   start_time?: InputMaybe<String_Comparison_Exp>;
   updated_at?: InputMaybe<Timestamptz_Comparison_Exp>;
+  user_id?: InputMaybe<Int_Comparison_Exp>;
 };
 
 /** unique or primary key constraints on table "tasks" */
@@ -449,6 +452,7 @@ export enum Tasks_Constraint {
 /** input type for incrementing numeric columns in table "tasks" */
 export type Tasks_Inc_Input = {
   id?: InputMaybe<Scalars['Int']>;
+  user_id?: InputMaybe<Scalars['Int']>;
 };
 
 /** input type for inserting data into table "tasks" */
@@ -460,6 +464,7 @@ export type Tasks_Insert_Input = {
   name?: InputMaybe<Scalars['String']>;
   start_time?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user_id?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate max on columns */
@@ -471,6 +476,7 @@ export type Tasks_Max_Fields = {
   name?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['Int']>;
 };
 
 /** aggregate min on columns */
@@ -482,6 +488,7 @@ export type Tasks_Min_Fields = {
   name?: Maybe<Scalars['String']>;
   start_time?: Maybe<Scalars['String']>;
   updated_at?: Maybe<Scalars['timestamptz']>;
+  user_id?: Maybe<Scalars['Int']>;
 };
 
 /** response of any mutation on the table "tasks" */
@@ -509,6 +516,7 @@ export type Tasks_Order_By = {
   name?: InputMaybe<Order_By>;
   start_time?: InputMaybe<Order_By>;
   updated_at?: InputMaybe<Order_By>;
+  user_id?: InputMaybe<Order_By>;
 };
 
 /** primary key columns input for table: tasks */
@@ -531,7 +539,9 @@ export enum Tasks_Select_Column {
   /** column name */
   StartTime = 'start_time',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
 }
 
 /** input type for updating data in table "tasks" */
@@ -543,24 +553,28 @@ export type Tasks_Set_Input = {
   name?: InputMaybe<Scalars['String']>;
   start_time?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user_id?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate stddev on columns */
 export type Tasks_Stddev_Fields = {
   __typename?: 'tasks_stddev_fields';
   id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_pop on columns */
 export type Tasks_Stddev_Pop_Fields = {
   __typename?: 'tasks_stddev_pop_fields';
   id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate stddev_samp on columns */
 export type Tasks_Stddev_Samp_Fields = {
   __typename?: 'tasks_stddev_samp_fields';
   id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
 };
 
 /** Streaming cursor of the table "tasks" */
@@ -580,12 +594,14 @@ export type Tasks_Stream_Cursor_Value_Input = {
   name?: InputMaybe<Scalars['String']>;
   start_time?: InputMaybe<Scalars['String']>;
   updated_at?: InputMaybe<Scalars['timestamptz']>;
+  user_id?: InputMaybe<Scalars['Int']>;
 };
 
 /** aggregate sum on columns */
 export type Tasks_Sum_Fields = {
   __typename?: 'tasks_sum_fields';
   id?: Maybe<Scalars['Int']>;
+  user_id?: Maybe<Scalars['Int']>;
 };
 
 /** update columns of table "tasks" */
@@ -603,7 +619,9 @@ export enum Tasks_Update_Column {
   /** column name */
   StartTime = 'start_time',
   /** column name */
-  UpdatedAt = 'updated_at'
+  UpdatedAt = 'updated_at',
+  /** column name */
+  UserId = 'user_id'
 }
 
 export type Tasks_Updates = {
@@ -619,18 +637,21 @@ export type Tasks_Updates = {
 export type Tasks_Var_Pop_Fields = {
   __typename?: 'tasks_var_pop_fields';
   id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate var_samp on columns */
 export type Tasks_Var_Samp_Fields = {
   __typename?: 'tasks_var_samp_fields';
   id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
 };
 
 /** aggregate variance on columns */
 export type Tasks_Variance_Fields = {
   __typename?: 'tasks_variance_fields';
   id?: Maybe<Scalars['Float']>;
+  user_id?: Maybe<Scalars['Float']>;
 };
 
 /** Boolean expression to compare columns of type "timestamptz". All fields are combined with logical 'AND'. */
@@ -897,12 +918,15 @@ export type AddTaskMutationVariables = Exact<{
   name: Scalars['String'];
   start_time: Scalars['String'];
   end_time: Scalars['String'];
+  user_id: Scalars['Int'];
 }>;
 
 
 export type AddTaskMutation = { __typename?: 'mutation_root', insert_tasks_one?: { __typename?: 'tasks', id: number, name: string, start_time: string, end_time: string, created_at: any, updated_at: any } | null };
 
-export type FetchTasksQueryVariables = Exact<{ [key: string]: never; }>;
+export type FetchTasksQueryVariables = Exact<{
+  user_id: Scalars['Int'];
+}>;
 
 
 export type FetchTasksQuery = { __typename?: 'query_root', tasks: Array<{ __typename?: 'tasks', id: number, name: string, start_time: string, end_time: string, completed?: boolean | null, created_at: any, updated_at: any }> };
@@ -925,9 +949,9 @@ export type SignupMutation = { __typename?: 'mutation_root', insert_users_one?: 
 
 
 export const AddTaskDocument = /*#__PURE__*/ `
-    mutation AddTask($name: String!, $start_time: String!, $end_time: String!) {
+    mutation AddTask($name: String!, $start_time: String!, $end_time: String!, $user_id: Int!) {
   insert_tasks_one(
-    object: {name: $name, start_time: $start_time, end_time: $end_time}
+    object: {name: $name, start_time: $start_time, end_time: $end_time, user_id: $user_id}
   ) {
     id
     name
@@ -952,8 +976,8 @@ export const useAddTaskMutation = <
       options
     );
 export const FetchTasksDocument = /*#__PURE__*/ `
-    query fetchTasks {
-  tasks {
+    query fetchTasks($user_id: Int!) {
+  tasks(where: {user_id: {_eq: $user_id}}) {
     id
     name
     start_time
@@ -969,17 +993,17 @@ export const useFetchTasksQuery = <
       TError = unknown
     >(
       client: GraphQLClient,
-      variables?: FetchTasksQueryVariables,
+      variables: FetchTasksQueryVariables,
       options?: UseQueryOptions<FetchTasksQuery, TError, TData>,
       headers?: RequestInit['headers']
     ) =>
     useQuery<FetchTasksQuery, TError, TData>(
-      variables === undefined ? ['fetchTasks'] : ['fetchTasks', variables],
+      ['fetchTasks', variables],
       fetcher<FetchTasksQuery, FetchTasksQueryVariables>(client, FetchTasksDocument, variables, headers),
       options
     );
 
-useFetchTasksQuery.getKey = (variables?: FetchTasksQueryVariables) => variables === undefined ? ['fetchTasks'] : ['fetchTasks', variables];
+useFetchTasksQuery.getKey = (variables: FetchTasksQueryVariables) => ['fetchTasks', variables];
 ;
 
 export const LoginDocument = /*#__PURE__*/ `

@@ -7,8 +7,10 @@ import toast, { Toaster } from 'react-hot-toast';
 import { CustomError, CustomResponse } from '@/types/frontend/axios';
 import { storage } from '@/utils/frontend/storage';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const LoginForm = () => {
+    const router = useRouter();
     const schema = Yup.object().shape({
         email: Yup.string().required('Email is required.').email('Please enter a valid email address.'),
         password: Yup.string().required('Password is required.').min(6, 'Password must be at least 6 characters.'),
@@ -28,6 +30,7 @@ const LoginForm = () => {
             storage.setAccessToken(response.accessToken as string);
             storage.setRefreshToken(response.refreshToken as string);
             toast.success(response?.message || "Logged in")
+            router.push('/todo')
             reset();
         },
         onError: (e: CustomError) => {

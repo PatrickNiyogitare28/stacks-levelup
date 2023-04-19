@@ -1,12 +1,11 @@
-query fetchTasks {
-    tasks {
-          id
-          name
-          start_time
-          end_time
-          completed
-          created_at
-          updated_at
-        
-    }
+query fetchTasks($user_id: Int!) {
+  tasks(where: {user_id: {_eq: $user_id}}) {
+    id
+    name
+    start_time
+    end_time
+    completed
+    created_at
+    updated_at
+  }
 }

@@ -36,7 +36,8 @@ const SignupForm = () => {
             toast.error(e?.response?.data?.message || "An error occurred")
         },
     });
-    const onSubmit = async (formData: any) => {
+   
+    const onSubmit = async (formData: FormData) => {
         try {
             mutate(formData);
         }
@@ -52,7 +53,7 @@ const SignupForm = () => {
             <div className="max-w-md mx-auto p-4 bg-green-50 rounded-lg w-3/5">
                 <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
 
-                <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md mx-auto">
+                <form onSubmit={handleSubmit((data) => onSubmit(data as FormData))} className="w-full max-w-md mx-auto">
                     <div className="flex flex-wrap -mx-3 mb-6">
                         <div className="w-full px-3">
                             <label htmlFor="fullName" className="block mb-1 font-medium">Full Name</label>

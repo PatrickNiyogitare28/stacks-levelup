@@ -8,6 +8,7 @@ type Data = {
   error?: string;
   message?: string;
   data?: unknown;
+  authToken?: string;
 };
 import { LoginDocument, Users as User } from '@/generated/graphql';
 import { signAccessToken, signRefreshToken } from '@/utils/backend/tokens';
@@ -25,9 +26,12 @@ export default async function handler(
       const isVerified = await verifyPassword(password, user.password);
       if(!isVerified) return res.status(HttpStatusCode.Unauthorized).json({message: 'Invalid credentials'});
       
+      const accessToken = signAccessToken(_.omit(user, ['password']));
+      res.setHeader('Set-Cookie', `accessToken=${accessToken}; Path=/; HttpOnly`);
+
       res.status(HttpStatusCode.Ok).json({data: {
         message: "Logged in successfully",
-        accessToken: signAccessToken(_.omit(user, ['password'])),
+        accessToken: accessToken,
         refreshToken: signRefreshToken(_.omit(user, ['password']))
       } });
     } catch (error) {

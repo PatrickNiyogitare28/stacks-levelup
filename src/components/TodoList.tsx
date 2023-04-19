@@ -93,7 +93,7 @@ const TodoList = () => {
         },
     })
 
-    const onSubmit = async (formData: any) => {
+    const onSubmit = async (formData: FormData) => {
         try {
             createTaskMutation(formData);
         } catch (error) {
@@ -102,13 +102,13 @@ const TodoList = () => {
     };
 
     return (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center ">
             <div className="w-3/4 min-h-[70vh] bg-green-50 rounded-lg">
                 <Toaster />
                 <h1 className="text-2xl font-bold mb-4 text-center">Todo List</h1>
 
                 <div className="grid grid-cols-2 gap-4">
-                    <form onSubmit={handleSubmit(onSubmit)} className="p-4">
+                    <form onSubmit={handleSubmit((data) => onSubmit(data as FormData))} className="p-4">
                         <div className="flex flex-wrap -mx-3 mb-6">
                             <div className="w-full px-3">
                                 <FormInput

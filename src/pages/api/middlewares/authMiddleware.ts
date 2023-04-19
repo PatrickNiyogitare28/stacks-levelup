@@ -1,3 +1,4 @@
+import { UserPayload } from '@/types/backend/UserPayload';
 import { decodeToken } from '@/utils/backend/tokens';
 import { HttpStatusCode } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
@@ -16,7 +17,7 @@ const authMiddleware = (handler: (req: NextApiRequest, res: NextApiResponse) => 
     const decoded = await decodeToken(token);
     if(!decoded) return res.status(HttpStatusCode.Unauthorized).json({error: 'Unauthorized'})
 
-    req.query.user_id = decoded.id;
+    req.query.user_id = (decoded as UserPayload).id.toString();
     return handler(req, res);
   } catch (error) {
     return res.status(HttpStatusCode.Unauthorized).json({ error: 'Unauthorized' });

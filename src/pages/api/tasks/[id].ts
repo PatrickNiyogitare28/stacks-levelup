@@ -3,6 +3,7 @@ import { UpdateTaskDocument, DeleteTaskDocument, GetTaskByIdDocument } from '@/g
 import graphqlRequestClient from '@/lib/client';
 import { HttpStatusCode } from 'axios';
 import authMiddleware from '../middlewares/authMiddleware';
+import { TaskPayload } from '@/types/backend/TaskPayload';
 
 type Data = {
   error?: string;
@@ -31,7 +32,7 @@ async function putHandler(
       const { user_id } = req.query;
       const { id } = req.query; 
   
-      const taskResponse:any = await graphqlRequestClient.request(GetTaskByIdDocument, { id });
+      const taskResponse: {tasks_by_pk: TaskPayload} = await graphqlRequestClient.request(GetTaskByIdDocument, { id });
       const task = taskResponse.tasks_by_pk;
       if (!task || task.user_id !== user_id) {
         res.status(HttpStatusCode.Forbidden).json({ error: 'Not allowed to perform this action' });
@@ -56,7 +57,7 @@ async function deleteHandler(
     const { user_id } = req.query;
     const { id } = req.query; 
 
-    const taskResponse:any = await graphqlRequestClient.request(GetTaskByIdDocument, { id });
+    const taskResponse: {tasks_by_pk: TaskPayload} = await graphqlRequestClient.request(GetTaskByIdDocument, { id });
     const task = taskResponse.tasks_by_pk;
     if (!task || task.user_id !== user_id) {
       res.status(HttpStatusCode.Forbidden).json({ error: 'Not allowed to perform this action' });

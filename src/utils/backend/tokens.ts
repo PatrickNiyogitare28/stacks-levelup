@@ -1,5 +1,5 @@
 import { UserPayload } from '@/types/backend/UserPayload';
-import jwt from 'jsonwebtoken';
+import jwt, { JwtPayload } from 'jsonwebtoken';
 
 const secret = process.env.JWT_SECRET || 'default_secret'; // Replace 'default_secret' with your default secret or handle error accordingly
 
@@ -13,7 +13,7 @@ export const signRefreshToken = (data: UserPayload): string => {
   return token;
 };
 
-export const decodeToken = (token: string): any => {
+export const decodeToken = (token: string): string | JwtPayload => {
   const decoded = jwt.verify(token, secret);
   return decoded;
 };

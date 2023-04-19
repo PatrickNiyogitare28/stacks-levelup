@@ -34,7 +34,7 @@ async function putHandler(
   
       const taskResponse: {tasks_by_pk: TaskPayload} = await graphqlRequestClient.request(GetTaskByIdDocument, { id });
       const task = taskResponse.tasks_by_pk;
-      if (!task || task.user_id !== user_id) {
+      if (!task || task.user_id != user_id) {
         res.status(HttpStatusCode.Forbidden).json({ error: 'Not allowed to perform this action' });
         return;
       }
@@ -59,7 +59,7 @@ async function deleteHandler(
 
     const taskResponse: {tasks_by_pk: TaskPayload} = await graphqlRequestClient.request(GetTaskByIdDocument, { id });
     const task = taskResponse.tasks_by_pk;
-    if (!task || task.user_id !== user_id) {
+    if (!task || task.user_id != user_id) {
       res.status(HttpStatusCode.Forbidden).json({ error: 'Not allowed to perform this action' });
       return;
     }

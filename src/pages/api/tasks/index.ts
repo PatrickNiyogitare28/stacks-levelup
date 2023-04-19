@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import { FetchTasksDocument, AddTaskDocument } from '@/generated/graphql';
 import graphqlRequestClient from '@/lib/client';
 import { HttpStatusCode } from 'axios';
-import authMiddleware from './middlewares/authMiddleware';
+import authMiddleware from '../middlewares/authMiddleware';
 
 type Data = {
   error?: string;

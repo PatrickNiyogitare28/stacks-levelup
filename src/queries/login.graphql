@@ -1,8 +1,0 @@
-query Login($email: String!) {
-  users(where: {email: {_eq: $email}}) {
-    id
-    email
-    full_name
-    password
-  }
-}

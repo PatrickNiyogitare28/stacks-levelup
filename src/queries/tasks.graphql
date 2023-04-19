@@ -13,3 +13,15 @@ mutation AddTask($name: String!, $start_time: String!, $end_time: String!, $user
     updated_at
   }
 }
+
+query fetchTasks($user_id: Int!) {
+  tasks(where: {user_id: {_eq: $user_id}}) {
+    id
+    name
+    start_time
+    end_time
+    completed
+    created_at
+    updated_at
+  }
+}

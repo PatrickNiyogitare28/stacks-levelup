@@ -8,3 +8,13 @@ mutation Signup($full_name: String!, $email: String!, $password: String!) {
     full_name
   }
 }
+
+
+query Login($email: String!) {
+  users(where: {email: {_eq: $email}}) {
+    id
+    email
+    full_name
+    password
+  }
+}

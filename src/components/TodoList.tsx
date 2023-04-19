@@ -57,18 +57,13 @@ const TodoList = () => {
 
     const onSubmit = async (formData: any) => {
         try {
-            createTaskMutation(formData); // Make a POST request to the /api/tasks endpoint with the form data
+            createTaskMutation(formData);
         } catch (error) {
             console.error('Failed to add task:', error);
-            // Handle the error as needed
         }
     };
 
     return (
-
-
-
-
         <div className="flex justify-center items-center h-screen">
             <div className="w-3/4 bg-green-50 rounded-lg">
                 <Toaster />
@@ -131,8 +126,6 @@ const TodoList = () => {
                                             type="checkbox"
                                             className="mr-2"
                                             checked={task.completed as boolean}
-                                        // Handle checkbox state and logic here
-                                        // For example, you can use state or a callback function
                                         />
                                         <span className="font-bold">{task.name}</span> | {task.start_time} - {task.end_time}
                                     </li>

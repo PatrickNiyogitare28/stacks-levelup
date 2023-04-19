@@ -1,5 +1,5 @@
 import { GraphQLClient } from 'graphql-request';
-import { RequestInit } from 'next/dist/server/web/spec-extension/request';
+import { RequestInit } from 'graphql-request/dist/types.dom';
 import { useMutation, useQuery, UseMutationOptions, UseQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
@@ -914,6 +914,22 @@ export type Users_Variance_Fields = {
   id?: Maybe<Scalars['Float']>;
 };
 
+export type SignupMutationVariables = Exact<{
+  full_name: Scalars['String'];
+  email: Scalars['String'];
+  password: Scalars['String'];
+}>;
+
+
+export type SignupMutation = { __typename?: 'mutation_root', insert_users_one?: { __typename?: 'users', id: number, full_name: string } | null };
+
+export type LoginQueryVariables = Exact<{
+  email: Scalars['String'];
+}>;
+
+
+export type LoginQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'users', id: number, email: string, full_name: string, password: string }> };
+
 export type AddTaskMutationVariables = Exact<{
   name: Scalars['String'];
   start_time: Scalars['String'];
@@ -931,22 +947,57 @@ export type FetchTasksQueryVariables = Exact<{
 
 export type FetchTasksQuery = { __typename?: 'query_root', tasks: Array<{ __typename?: 'tasks', id: number, name: string, start_time: string, end_time: string, completed?: boolean | null, created_at: any, updated_at: any }> };
 
-export type LoginQueryVariables = Exact<{
-  email: Scalars['String'];
-}>;
 
+export const SignupDocument = /*#__PURE__*/ `
+    mutation Signup($full_name: String!, $email: String!, $password: String!) {
+  insert_users_one(
+    object: {full_name: $full_name, email: $email, password: $password}
+  ) {
+    id
+    full_name
+  }
+}
+    `;
+export const useSignupMutation = <
+      TError = unknown,
+      TContext = unknown
+    >(
+      client: GraphQLClient,
+      options?: UseMutationOptions<SignupMutation, TError, SignupMutationVariables, TContext>,
+      headers?: RequestInit['headers']
+    ) =>
+    useMutation<SignupMutation, TError, SignupMutationVariables, TContext>(
+      ['Signup'],
+      (variables?: SignupMutationVariables) => fetcher<SignupMutation, SignupMutationVariables>(client, SignupDocument, variables, headers)(),
+      options
+    );
+export const LoginDocument = /*#__PURE__*/ `
+    query Login($email: String!) {
+  users(where: {email: {_eq: $email}}) {
+    id
+    email
+    full_name
+    password
+  }
+}
+    `;
+export const useLoginQuery = <
+      TData = LoginQuery,
+      TError = unknown
+    >(
+      client: GraphQLClient,
+      variables: LoginQueryVariables,
+      options?: UseQueryOptions<LoginQuery, TError, TData>,
+      headers?: RequestInit['headers']
+    ) =>
+    useQuery<LoginQuery, TError, TData>(
+      ['Login', variables],
+      fetcher<LoginQuery, LoginQueryVariables>(client, LoginDocument, variables, headers),
+      options
+    );
 
-export type LoginQuery = { __typename?: 'query_root', users: Array<{ __typename?: 'users', id: number, email: string, full_name: string, password: string }> };
-
-export type SignupMutationVariables = Exact<{
-  full_name: Scalars['String'];
-  email: Scalars['String'];
-  password: Scalars['String'];
-}>;
-
-
-export type SignupMutation = { __typename?: 'mutation_root', insert_users_one?: { __typename?: 'users', id: number, full_name: string } | null };
-
+useLoginQuery.getKey = (variables: LoginQueryVariables) => ['Login', variables];
+;
 
 export const AddTaskDocument = /*#__PURE__*/ `
     mutation AddTask($name: String!, $start_time: String!, $end_time: String!, $user_id: Int!) {
@@ -1005,55 +1056,3 @@ export const useFetchTasksQuery = <
 
 useFetchTasksQuery.getKey = (variables: FetchTasksQueryVariables) => ['fetchTasks', variables];
 ;
-
-export const LoginDocument = /*#__PURE__*/ `
-    query Login($email: String!) {
-  users(where: {email: {_eq: $email}}) {
-    id
-    email
-    full_name
-    password
-  }
-}
-    `;
-export const useLoginQuery = <
-      TData = LoginQuery,
-      TError = unknown
-    >(
-      client: GraphQLClient,
-      variables: LoginQueryVariables,
-      options?: UseQueryOptions<LoginQuery, TError, TData>,
-      headers?: RequestInit['headers']
-    ) =>
-    useQuery<LoginQuery, TError, TData>(
-      ['Login', variables],
-      fetcher<LoginQuery, LoginQueryVariables>(client, LoginDocument, variables, headers),
-      options
-    );
-
-useLoginQuery.getKey = (variables: LoginQueryVariables) => ['Login', variables];
-;
-
-export const SignupDocument = /*#__PURE__*/ `
-    mutation Signup($full_name: String!, $email: String!, $password: String!) {
-  insert_users_one(
-    object: {full_name: $full_name, email: $email, password: $password}
-  ) {
-    id
-    full_name
-  }
-}
-    `;
-export const useSignupMutation = <
-      TError = unknown,
-      TContext = unknown
-    >(
-      client: GraphQLClient,
-      options?: UseMutationOptions<SignupMutation, TError, SignupMutationVariables, TContext>,
-      headers?: RequestInit['headers']
-    ) =>
-    useMutation<SignupMutation, TError, SignupMutationVariables, TContext>(
-      ['Signup'],
-      (variables?: SignupMutationVariables) => fetcher<SignupMutation, SignupMutationVariables>(client, SignupDocument, variables, headers)(),
-      options
-    );

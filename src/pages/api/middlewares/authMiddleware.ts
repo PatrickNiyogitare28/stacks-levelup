@@ -1,5 +1,3 @@
-// pages/api/middleware/authMiddleware.ts
-
 import { decodeToken } from '@/utils/backend/tokens';
 import { HttpStatusCode } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
